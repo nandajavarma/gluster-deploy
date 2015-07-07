@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
-#   gluster_deploy.py
+#   gluster-deploy.py
 #   ----------------
 #
 # gluster_deploy script, taking a configuration file as input,
@@ -30,17 +30,17 @@
 import argparse
 import sys
 import os
-from generator_modules import ConfigParseHelpers
-from generator_modules import VarFileGenerator
+from common import ConfigParseHelpers
+from ansible_playbook_gen import AnsiblePlaybookGen
 
 
-class GlusterDeploy(VarFileGenerator, ConfigParseHelpers):
+class GlusterDeploy(AnsiblePlaybookGen, ConfigParseHelpers):
 
     def __init__(self):
         args = self.parse_arguments()
         config_file = args.config_file.name
         self.base_dir = '/tmp/playbooks'
-        VarFileGenerator(config_file, self.base_dir)
+        AnsiblePlaybookGen(config_file, self.base_dir)
         self.deploy_gluster()
         self.cleanup(args.keep)
 
