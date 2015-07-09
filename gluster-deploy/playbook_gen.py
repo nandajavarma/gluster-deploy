@@ -41,10 +41,15 @@ class PlaybookGen(YamlWriter):
 
     def __init__(self, config_file):
         self.config = self.read_config(config_file)
-        options = self.config_get_sections(self.config)
+        self.options = self.config_get_sections(self.config)
         self.hosts = self.config_get_options(self.config, 'hosts', True)
-        if set(self.hosts).intersection(set(options)):
-            if set(self.hosts).issubset(set(options)):
+        self.choose_var_file_type()
+        self.move_templates_to_playbooks()
+        self.create_inventory()
+
+    def choose_var_file_type(self):
+        if set(self.hosts).intersection(set(self.options)):
+            if set(self.hosts).issubset(set(self.options)):
                 self.var_file = 'host_vars'
             else:
                 print "Error: Looks like you missed to give configurations " \
@@ -55,11 +60,9 @@ class PlaybookGen(YamlWriter):
         vars_dir = self.get_file_dir_path(Global.base_dir, self.var_file)
         dir_list = [Global.base_dir, vars_dir]
         self.mk_dir(dir_list)
-        output = {'host_vars': self.host_vars_gen,
-                  'group_vars': self.group_vars_gen
-                  }[self.var_file](vars_dir)
-        self.move_templates_to_playbooks()
-        self.create_inventory()
+        {'host_vars': self.host_vars_gen,
+         'group_vars': self.group_vars_gen
+        }[self.var_file](vars_dir)
 
     def create_inventory(self):
         self.write_config(Global.group, self.hosts, Global.inventory)
@@ -93,7 +96,7 @@ class PlaybookGen(YamlWriter):
     def move_templates_to_playbooks(self):
         templates_path = '/usr/share/ansible/ansible-glusterfs/templates'
         templates_path_bk = self.get_file_dir_path(os.path.dirname(__file__),
-                '../templates')
+                'templates')
         if not (self.template_files_create(templates_path) or
                 self.template_files_create(templates_path_bk)):
             print "Error: Template files not found at %s or %s. " \
