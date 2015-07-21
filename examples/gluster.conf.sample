@@ -112,7 +112,7 @@ stripsize-128
 
 [clients]
 hosts=10.70.46.19,10.70.46.15
-mountpoints=/mnt/hello,/mnt/world
+fstype=nfs,glusterfs
 #-----------------------------------
 
 # The section volume specifies the configuration options for the volume.
@@ -151,3 +151,5 @@ redundancy_count=2
 
 # [fstype]
 # nfs
+
+
