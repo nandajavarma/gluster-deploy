@@ -136,19 +136,15 @@ class PlaybookGen(GlusterConfWriter):
         /tmp/playbooks
         '''
         # Is the templates present as a part of ansible installation?
-        templates_path_pkg = '/usr/share/ansible/ansible-glusterfs/templates'
-        # Or is it present in the source directory or installed via setuptools
-        templates_path_bk = self.get_file_dir_path(self.uppath(__file__, 2),
-                                                   'templates')
+        templates_path_pkg = '/usr/share/ansible/gdeploy/templates'
         templates_dir = [
             path for path in [
-                templates_path_pkg,
-                templates_path_bk] if os.path.isdir(path)]
+                templates_path_pkg ] if os.path.isdir(path)]
         if not templates_dir:
-            print "Error: Template files not found at %s or %s. " \
-                "Check your ansible-gluster " \
-                "installation and try " \
-                "again." % (templates_path_pkg, templates_path_bk)
+            print "Error: Template files not found at %s or " \
+                "ANSIBLE_LIBRARY environment variable is not set.\n" \
+                "Check your gdeploy installation and try again." \
+                % (templates_path_pkg)
             self.cleanup_and_quit()
         self.template_files_create(templates_dir[0])
 
