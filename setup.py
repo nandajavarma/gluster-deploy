@@ -1,21 +1,14 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="gluster-deploy",
+    name="gdeploy",
 
-    version="1.0.0",
+    version="1.0",
 
     author="Nandaja Varma",
     author_email="nandaja.varma@gmail.com",
 
-    packages=[  'glusterlib',
-                'modules',
-                'templates'
-             ],
-
-    package_data={
-        "templates": [
-            "templates/*"]},
+    packages=[  'glusterlib' ],
 
     scripts=[
         'bin/gdeploy'
